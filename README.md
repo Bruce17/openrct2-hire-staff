@@ -1,4 +1,4 @@
-# 🎢 openrct2-typescript-mod-template
+# 🎢 openrct2-hire-staff
 
 Template repository for OpenRCT2 mods written in TypeScript.
 
