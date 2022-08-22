@@ -15,7 +15,7 @@
 //   /// <reference path="/path/to/openrct2.d.ts" />
 //
 
-export type PluginType = 'local' | 'remote' | 'intransient';
+export type PluginType = "local" | "remote" | "intransient";
 
 declare global {
   /**
@@ -218,11 +218,17 @@ declare global {
      * @param index The index.
      */
     getObject(type: ObjectType, index: number): LoadedObject;
-    getObject(type: 'ride', index: number): RideObject;
-    getObject(type: 'small_scenery', index: number): SmallSceneryObject;
+    getObject(type: "ride", index: number): RideObject;
+    getObject(type: "small_scenery", index: number): SmallSceneryObject;
 
     getAllObjects(type: ObjectType): LoadedObject[];
-    getAllObjects(type: 'ride'): RideObject[];
+    getAllObjects(type: "ride"): RideObject[];
+
+    /**
+     * Gets the {@link TrackSegment} for the given type.
+     * @param type The track segment type.
+     */
+    getTrackSegment(type: number): TrackSegment | null;
 
     /**
      * Gets a random integer within the specified range using the game's pseudo-
@@ -252,8 +258,7 @@ declare global {
     registerAction(
       action: string,
       query: (args: object) => GameActionResult,
-      execute: (args: object) => GameActionResult
-    ): void;
+      execute: (args: object) => GameActionResult): void;
 
     /**
      * Query the result of running a game action. This allows you to check the outcome and validity of
@@ -280,25 +285,25 @@ declare global {
      */
     subscribe(hook: HookType, callback: Function): IDisposable;
 
-    subscribe(hook: 'action.query', callback: (e: GameActionEventArgs) => void): IDisposable;
-    subscribe(hook: 'action.execute', callback: (e: GameActionEventArgs) => void): IDisposable;
-    subscribe(hook: 'interval.tick', callback: () => void): IDisposable;
-    subscribe(hook: 'interval.day', callback: () => void): IDisposable;
-    subscribe(hook: 'network.chat', callback: (e: NetworkChatEventArgs) => void): IDisposable;
-    subscribe(hook: 'network.authenticate', callback: (e: NetworkAuthenticateEventArgs) => void): IDisposable;
-    subscribe(hook: 'network.join', callback: (e: NetworkEventArgs) => void): IDisposable;
-    subscribe(hook: 'network.leave', callback: (e: NetworkEventArgs) => void): IDisposable;
-    subscribe(hook: 'ride.ratings.calculate', callback: (e: RideRatingsCalculateArgs) => void): IDisposable;
-    subscribe(hook: 'action.location', callback: (e: ActionLocationArgs) => void): IDisposable;
-    subscribe(hook: 'guest.generation', callback: (e: GuestGenerationArgs) => void): IDisposable;
-    subscribe(hook: 'vehicle.crash', callback: (e: VehicleCrashArgs) => void): IDisposable;
-    subscribe(hook: 'map.save', callback: () => void): IDisposable;
-    subscribe(hook: 'map.change', callback: () => void): IDisposable;
+    subscribe(hook: "action.query", callback: (e: GameActionEventArgs) => void): IDisposable;
+    subscribe(hook: "action.execute", callback: (e: GameActionEventArgs) => void): IDisposable;
+    subscribe(hook: "interval.tick", callback: () => void): IDisposable;
+    subscribe(hook: "interval.day", callback: () => void): IDisposable;
+    subscribe(hook: "network.chat", callback: (e: NetworkChatEventArgs) => void): IDisposable;
+    subscribe(hook: "network.authenticate", callback: (e: NetworkAuthenticateEventArgs) => void): IDisposable;
+    subscribe(hook: "network.join", callback: (e: NetworkEventArgs) => void): IDisposable;
+    subscribe(hook: "network.leave", callback: (e: NetworkEventArgs) => void): IDisposable;
+    subscribe(hook: "ride.ratings.calculate", callback: (e: RideRatingsCalculateArgs) => void): IDisposable;
+    subscribe(hook: "action.location", callback: (e: ActionLocationArgs) => void): IDisposable;
+    subscribe(hook: "guest.generation", callback: (e: GuestGenerationArgs) => void): IDisposable;
+    subscribe(hook: "vehicle.crash", callback: (e: VehicleCrashArgs) => void): IDisposable;
+    subscribe(hook: "map.save", callback: () => void): IDisposable;
+    subscribe(hook: "map.change", callback: () => void): IDisposable;
 
     /**
      * Can only be used in intransient plugins.
      */
-    subscribe(hook: 'map.changed', callback: () => void): IDisposable;
+    subscribe(hook: "map.changed", callback: () => void): IDisposable;
 
     /**
      * Registers a function to be called every so often in realtime, specified by the given delay.
@@ -378,135 +383,132 @@ declare global {
     transparent?: boolean;
   }
 
-  type GameMode = 'normal' | 'title' | 'scenario_editor' | 'track_designer' | 'track_manager';
+  type GameMode =
+    "normal" |
+    "title" |
+    "scenario_editor" |
+    "track_designer" |
+    "track_manager";
 
   type ObjectType =
-    | 'ride'
-    | 'small_scenery'
-    | 'large_scenery'
-    | 'wall'
-    | 'banner'
-    | 'footpath'
-    | 'footpath_addition'
-    | 'scenery_group'
-    | 'park_entrance'
-    | 'water'
-    | 'terrain_surface'
-    | 'terrain_edge'
-    | 'station'
-    | 'music'
-    | 'footpath_surface'
-    | 'footpath_railings';
+    "ride" |
+    "small_scenery" |
+    "large_scenery" |
+    "wall" |
+    "banner" |
+    "footpath" |
+    "footpath_addition" |
+    "scenery_group" |
+    "park_entrance" |
+    "water" |
+    "terrain_surface" |
+    "terrain_edge" |
+    "station" |
+    "music" |
+    "footpath_surface" |
+    "footpath_railings";
 
   type HookType =
-    | 'interval.tick'
-    | 'interval.day'
-    | 'network.chat'
-    | 'network.action'
-    | 'network.join'
-    | 'network.leave'
-    | 'ride.ratings.calculate'
-    | 'action.location'
-    | 'vehicle.crash'
-    | 'map.change'
-    | 'map.changed'
-    | 'map.save';
+    "interval.tick" | "interval.day" |
+    "network.chat" | "network.action" | "network.join" | "network.leave" |
+    "ride.ratings.calculate" | "action.location" | "vehicle.crash" |
+    "map.change" | "map.changed" | "map.save";
 
   type ExpenditureType =
-    | 'ride_construction'
-    | 'ride_runningcosts'
-    | 'land_purchase'
-    | 'landscaping'
-    | 'park_entrance_tickets'
-    | 'park_ride_tickets'
-    | 'shop_sales'
-    | 'shop_stock'
-    | 'food_drink_sales'
-    | 'food_drink_stock'
-    | 'wages'
-    | 'marketing'
-    | 'research'
-    | 'interest';
+    "ride_construction" |
+    "ride_runningcosts" |
+    "land_purchase" |
+    "landscaping" |
+    "park_entrance_tickets" |
+    "park_ride_tickets" |
+    "shop_sales" |
+    "shop_stock" |
+    "food_drink_sales" |
+    "food_drink_stock" |
+    "wages" |
+    "marketing" |
+    "research" |
+    "interest";
 
   type ActionType =
-    | 'balloonpress'
-    | 'bannerplace'
-    | 'bannerremove'
-    | 'bannersetcolour'
-    | 'bannersetname'
-    | 'bannersetstyle'
-    | 'changemapsize'
-    | 'clearscenery'
-    | 'climateset'
-    | 'footpathplace'
-    | 'footpathplacefromtrack'
-    | 'footpathremove'
-    | 'footpathadditionplace'
-    | 'footpathadditionremove'
-    | 'guestsetflags'
-    | 'guestsetname'
-    | 'landbuyrights'
-    | 'landlower'
-    | 'landraise'
-    | 'landsetheight'
-    | 'landsetrights'
-    | 'landsmoothaction'
-    | 'largesceneryplace'
-    | 'largesceneryremove'
-    | 'largescenerysetcolour'
-    | 'loadorquit'
-    | 'mazeplacetrack'
-    | 'mazesettrack'
-    | 'networkmodifygroup'
-    | 'parkentranceremove'
-    | 'parkmarketing'
-    | 'parksetdate'
-    | 'parksetloan'
-    | 'parksetname'
-    | 'parksetparameter'
-    | 'parksetresearchfunding'
-    | 'pausetoggle'
-    | 'peeppickup'
-    | 'placeparkentrance'
-    | 'placepeepspawn'
-    | 'playerkick'
-    | 'playersetgroup'
-    | 'ridecreate'
-    | 'ridedemolish'
-    | 'rideentranceexitplace'
-    | 'rideentranceexitremove'
-    | 'ridesetappearance'
-    | 'ridesetcolourscheme'
-    | 'ridesetname'
-    | 'ridesetprice'
-    | 'ridesetsetting'
-    | 'ridesetstatus'
-    | 'ridesetvehicles'
-    | 'scenariosetsetting'
-    | 'setcheataction'
-    | 'setparkentrancefee'
-    | 'signsetname'
-    | 'smallsceneryplace'
-    | 'smallsceneryremove'
-    | 'stafffire'
-    | 'staffhire'
-    | 'staffsetcolour'
-    | 'staffsetcostume'
-    | 'staffsetname'
-    | 'staffsetorders'
-    | 'staffsetpatrolarea'
-    | 'surfacesetstyle'
-    | 'tilemodify'
-    | 'trackdesign'
-    | 'trackplace'
-    | 'trackremove'
-    | 'tracksetbrakespeed'
-    | 'wallplace'
-    | 'wallremove'
-    | 'wallsetcolour'
-    | 'waterlower'
-    | 'waterraise'
-    | 'watersetheight';
+    "balloonpress" |
+    "bannerplace" |
+    "bannerremove" |
+    "bannersetcolour" |
+    "bannersetname" |
+    "bannersetstyle" |
+    "changemapsize" |
+    "clearscenery" |
+    "climateset" |
+    "footpathplace" |
+    "footpathplacefromtrack" |
+    "footpathremove" |
+    "footpathadditionplace" |
+    "footpathadditionremove" |
+    "guestsetflags" |
+    "guestsetname" |
+    "landbuyrights" |
+    "landlower" |
+    "landraise" |
+    "landsetheight" |
+    "landsetrights" |
+    "landsmoothaction" |
+    "largesceneryplace" |
+    "largesceneryremove" |
+    "largescenerysetcolour" |
+    "loadorquit" |
+    "mazeplacetrack" |
+    "mazesettrack" |
+    "networkmodifygroup" |
+    "parkentranceremove" |
+    "parkmarketing" |
+    "parksetdate" |
+    "parksetloan" |
+    "parksetname" |
+    "parksetparameter" |
+    "parksetresearchfunding" |
+    "pausetoggle" |
+    "peeppickup" |
+    "placeparkentrance" |
+    "placepeepspawn" |
+    "playerkick" |
+    "playersetgroup" |
+    "ridecreate" |
+    "ridedemolish" |
+    "rideentranceexitplace" |
+    "rideentranceexitremove" |
+    "ridesetappearance" |
+    "ridesetcolourscheme" |
+    "ridesetname" |
+    "ridesetprice" |
+    "ridesetsetting" |
+    "ridesetstatus" |
+    "ridesetvehicles" |
+    "scenariosetsetting" |
+    "setcheataction" |
+    "setparkentrancefee" |
+    "signsetname" |
+    "smallsceneryplace" |
+    "smallsceneryremove" |
+    "stafffire" |
+    "staffhire" |
+    "staffsetcolour" |
+    "staffsetcostume" |
+    "staffsetname" |
+    "staffsetorders" |
+    "staffsetpatrolarea" |
+    "surfacesetstyle" |
+    "tilemodify" |
+    "trackdesign" |
+    "trackplace" |
+    "trackremove" |
+    "tracksetbrakespeed" |
+    "wallplace" |
+    "wallremove" |
+    "wallsetcolour" |
+    "waterlower" |
+    "waterraise" |
+    "watersetheight";
 
   interface GameActionEventArgs {
     readonly player: number;
@@ -565,7 +567,7 @@ declare global {
     readonly id: number;
   }
 
-  type VehicleCrashIntoType = 'another_vehicle' | 'land' | 'water';
+  type VehicleCrashIntoType = "another_vehicle" | "land" | "water";
 
   interface VehicleCrashArgs {
     readonly id: number;
@@ -622,40 +624,36 @@ declare global {
     /**
      * @deprecated since version 34, use guest or staff instead.
      */
-    getAllEntities(type: 'peep'): Peep[];
-    getAllEntities(type: 'guest'): Guest[];
-    getAllEntities(type: 'staff'): Staff[];
-    getAllEntities(type: 'car'): Car[];
-    getAllEntities(type: 'litter'): Litter[];
+    getAllEntities(type: "peep"): Peep[];
+    getAllEntities(type: "guest"): Guest[];
+    getAllEntities(type: "staff"): Staff[];
+    getAllEntities(type: "car"): Car[];
+    getAllEntities(type: "litter"): Litter[];
     getAllEntitiesOnTile(type: EntityType, tilePos: CoordsXY): Entity[];
-    getAllEntitiesOnTile(type: 'guest', tilePos: CoordsXY): Guest[];
-    getAllEntitiesOnTile(type: 'staff', tilePos: CoordsXY): Staff[];
-    getAllEntitiesOnTile(type: 'car', tilePos: CoordsXY): Car[];
-    getAllEntitiesOnTile(type: 'litter', tilePos: CoordsXY): Litter[];
+    getAllEntitiesOnTile(type: "guest", tilePos: CoordsXY): Guest[];
+    getAllEntitiesOnTile(type: "staff", tilePos: CoordsXY): Staff[];
+    getAllEntitiesOnTile(type: "car", tilePos: CoordsXY): Car[];
+    getAllEntitiesOnTile(type: "litter", tilePos: CoordsXY): Litter[];
     createEntity(type: EntityType, initializer: object): Entity;
+
+    /**
+     * Gets a {@link TrackIterator} for the given track element. This can be used to
+     * iterate through a ride's circuit, segment by segment.
+     * @param location The tile coordinates.
+     * @param elementIndex The index of the track element on the tile.
+     */
+    getTrackIterator(location: CoordsXY, elementIndex: number): TrackIterator | null;
   }
 
   type TileElementType =
-    | 'surface'
-    | 'footpath'
-    | 'track'
-    | 'small_scenery'
-    | 'wall'
-    | 'entrance'
-    | 'large_scenery'
-    | 'banner';
+    "surface" | "footpath" | "track" | "small_scenery" | "wall" | "entrance" | "large_scenery" | "banner";
 
   type Direction = 0 | 1 | 2 | 3;
+  type Direction8 = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
   type TileElement =
-    | SurfaceElement
-    | FootpathElement
-    | TrackElement
-    | SmallSceneryElement
-    | WallElement
-    | EntranceElement
-    | LargeSceneryElement
-    | BannerElement;
+    SurfaceElement | FootpathElement | TrackElement | SmallSceneryElement | WallElement | EntranceElement
+    | LargeSceneryElement | BannerElement;
 
   interface BaseTileElement {
     type: TileElementType;
@@ -665,11 +663,11 @@ declare global {
     clearanceZ: number;
     occupiedQuadrants: number;
     isGhost: boolean;
-    isHidden: boolean /** Take caution when changing this field, it may invalidate TileElements you have stored in your script. */;
+    isHidden: boolean; /** Take caution when changing this field, it may invalidate TileElements you have stored in your script. */
   }
 
   interface SurfaceElement extends BaseTileElement {
-    type: 'surface';
+    type: "surface";
 
     slope: number;
     surfaceStyle: number;
@@ -684,11 +682,11 @@ declare global {
   }
 
   interface FootpathElement extends BaseTileElement {
-    type: 'footpath';
+    type: "footpath";
 
-    object: number | null /** Legacy footpaths, still in use. */;
-    surfaceObject: number | null /** NSF footpaths */;
-    railingsObject: number | null /** NSF footpaths */;
+    object: number | null; /** Legacy footpaths, still in use. */
+    surfaceObject: number | null; /** NSF footpaths */
+    railingsObject: number | null; /** NSF footpaths */
 
     edges: number;
     corners: number;
@@ -708,7 +706,7 @@ declare global {
   }
 
   interface TrackElement extends BaseTileElement {
-    type: 'track';
+    type: "track";
 
     direction: Direction;
     trackType: number;
@@ -726,10 +724,11 @@ declare global {
     hasChainLift: boolean;
     isInverted: boolean;
     hasCableLift: boolean;
+    isHighlighted: boolean;
   }
 
   interface SmallSceneryElement extends BaseTileElement {
-    type: 'small_scenery';
+    type: "small_scenery";
 
     direction: Direction;
     object: number;
@@ -740,7 +739,7 @@ declare global {
   }
 
   interface WallElement extends BaseTileElement {
-    type: 'wall';
+    type: "wall";
 
     direction: Direction;
     object: number;
@@ -752,7 +751,7 @@ declare global {
   }
 
   interface EntranceElement extends BaseTileElement {
-    type: 'entrance';
+    type: "entrance";
 
     direction: Direction;
     object: number;
@@ -764,18 +763,19 @@ declare global {
   }
 
   interface LargeSceneryElement extends BaseTileElement {
-    type: 'large_scenery';
+    type: "large_scenery";
 
     direction: Direction;
     object: number;
     primaryColour: number;
     secondaryColour: number;
+    tertiaryColour: number;
     bannerIndex: number | null;
     sequence: number;
   }
 
   interface BannerElement extends BaseTileElement {
-    type: 'banner';
+    type: "banner";
     direction: Direction;
     bannerIndex: number;
   }
@@ -878,12 +878,49 @@ declare global {
   }
 
   /**
+   * Represents a VehicleSpriteGroup
+   */
+  interface SpriteGroup {
+    readonly imageId: number;
+    readonly spriteNumImages: number;
+  }
+
+  /**
+   * Represents the sprite groups of a vehicle
+   */
+  interface SpriteGroups {
+    readonly slopeFlat?: SpriteGroup;
+    readonly slopes12?: SpriteGroup;
+    readonly slopes25?: SpriteGroup;
+    readonly slopes42?: SpriteGroup;
+    readonly slopes60?: SpriteGroup;
+    readonly slopes75?: SpriteGroup;
+    readonly slopes90?: SpriteGroup;
+    readonly slopesLoop?: SpriteGroup;
+    readonly slopeInverted?: SpriteGroup;
+    readonly slopes8?: SpriteGroup;
+    readonly slopes16?: SpriteGroup;
+    readonly slopes50?: SpriteGroup;
+    readonly flatBanked22?: SpriteGroup;
+    readonly flatBanked45?: SpriteGroup;
+    readonly flatBanked67?: SpriteGroup;
+    readonly flatBanked90?: SpriteGroup;
+    readonly inlineTwists?: SpriteGroup;
+    readonly slopes12Banked22?: SpriteGroup;
+    readonly slopes8Banked22?: SpriteGroup;
+    readonly slopes25Banked22?: SpriteGroup;
+    readonly slopes25Banked45?: SpriteGroup;
+    readonly slopes12Banked45?: SpriteGroup;
+    readonly corkscrews?: SpriteGroup;
+    readonly restraintAnimation?: SpriteGroup;
+    readonly curvedLiftHill?: SpriteGroup;
+  }
+
+  /**
    * Represents a defined vehicle within a Ride object definition.
    */
   interface RideObjectVehicle {
     readonly rotationFrameMask: number;
-    readonly numVerticalFrames: number;
-    readonly numHorizontalFrames: number;
     readonly spacing: number;
     readonly carMass: number;
     readonly tabHeight: number;
@@ -896,20 +933,7 @@ declare global {
     readonly flags: number;
     readonly baseNumFrames: number;
     readonly baseImageId: number;
-    readonly restraintImageId: number;
-    readonly gentleSlopeImageId: number;
-    readonly steepSlopeImageId: number;
-    readonly verticalSlopeImageId: number;
-    readonly diagonalSlopeImageId: number;
-    readonly bankedImageId: number;
-    readonly inlineTwistImageId: number;
-    readonly flatToGentleBankImageId: number;
-    readonly diagonalToGentleSlopeBankImageId: number;
-    readonly gentleSlopeToBankImageId: number;
-    readonly gentleSlopeBankTurnImageId: number;
-    readonly flatBankToGentleSlopeImageId: number;
-    readonly curvedLiftHillImageId: number;
-    readonly corkscrewImageId: number;
+    readonly spriteGroups: SpriteGroups;
     readonly noVehicleImages: number;
     readonly noSeatingRows: number;
     readonly spinningInertia: number;
@@ -1122,9 +1146,9 @@ declare global {
     readonly minLiftHillSpeed: number;
   }
 
-  type RideClassification = 'ride' | 'stall' | 'facility';
+  type RideClassification = "ride" | "stall" | "facility";
 
-  type RideStatus = 'closed' | 'open' | 'testing' | 'simulating';
+  type RideStatus = "closed" | "open" | "testing" | "simulating";
 
   interface TrackColour {
     main: number;
@@ -1145,25 +1169,157 @@ declare global {
     exit: CoordsXYZD;
   }
 
+  interface TrackSegment {
+    /**
+     * The track segment type.
+     */
+    readonly type: number;
+
+    /**
+     * Gets the localised description of the track segment.
+     */
+    readonly description: string;
+
+    /**
+     * The relative starting Z position.
+     */
+    readonly beginZ: number;
+
+    /**
+    * The relative starting direction. Usually 0, but will be 4
+    * for diagonal segments.
+    */
+    readonly beginDirection: Direction8;
+
+    /**
+     * The slope angle the segment starts with.
+     */
+    readonly beginAngle: TrackSlope;
+
+    /**
+     * The kind of banking the segment starts with.
+     */
+    readonly beginBank: TrackBanking;
+
+    /**
+     * The relative ending X position.
+     */
+    readonly endX: number;
+
+    /**
+     * The relative ending Y position.
+     */
+    readonly endY: number;
+
+    /**
+     * The relative ending Z position. Negative numbers indicate
+     * that the track ends upside down.
+     */
+    readonly endZ: number;
+
+    /**
+     * The relative ending direction.
+     */
+    readonly endDirection: Direction8;
+
+
+    /**
+     * The slope angle the segment ends with.
+     */
+    readonly endAngle: TrackSlope;
+
+    /**
+     * The kind of banking the segment ends with.
+     */
+    readonly endBank: TrackBanking;
+
+    /**
+     * The length of the segment in RCT track length units.
+     *
+     * *1 metre = 1 / (2 ^ 16)*
+     */
+    readonly length: number;
+
+    /**
+     * Gets a list of the elements that make up the track segment.
+     */
+    readonly elements: TrackSegmentElement[];
+  }
+
+  enum TrackSlope {
+    None = 0,
+    Up25 = 2,
+    Up60 = 4,
+    Down25 = 6,
+    Down60 = 8,
+    Up90 = 10,
+    Down90 = 18
+  }
+
+  enum TrackBanking {
+    None = 0,
+    Left = 2,
+    Right = 4,
+    UpsideDown = 15
+  }
+
+  interface TrackSegmentElement extends CoordsXYZ {
+  }
+
+  interface TrackIterator {
+    /**
+     * The position and direction of the current track segment. Usually this is the position of the
+     * first element of the segment, however for some segments, it may be offset.
+     */
+    readonly position: CoordsXYZD;
+
+    /**
+     * The current track segment.
+     */
+    readonly segment: TrackSegment | null;
+
+    /**
+     * Gets the position of where the previous track element should start.
+     */
+    readonly previousPosition: CoordsXYZD | null;
+
+    /**
+     * Gets the position of where the next track element should start.
+     */
+    readonly nextPosition: CoordsXYZD | null;
+
+    /**
+     * Moves the iterator to the previous track segment.
+     * @returns true if there is a previous segment, otherwise false.
+     */
+    previous(): boolean;
+
+    /**
+     * Moves the iterator to the next track segment.
+     * @returns true if there is a next segment, otherwise false.
+     */
+    next(): boolean;
+  }
+
   type EntityType =
-    | 'balloon'
-    | 'car'
-    | 'crash_splash'
-    | 'crashed_vehicle_particle'
-    | 'duck'
-    | 'explosion_cloud'
-    | 'explosion_flare'
-    | 'jumping_fountain_snow'
-    | 'jumping_fountain_water'
-    | 'litter'
-    | 'money_effect'
-    | 'guest'
-    | 'staff'
-    | 'steam_particle'
+    "balloon" |
+    "car" |
+    "crash_splash" |
+    "crashed_vehicle_particle" |
+    "duck" |
+    "explosion_cloud" |
+    "explosion_flare" |
+    "jumping_fountain_snow" |
+    "jumping_fountain_water" |
+    "litter" |
+    "money_effect" |
+    "guest" |
+    "staff" |
+    "steam_particle" |
     /**
      * @deprecated since version 34, use guest or staff instead.
      */
-    | 'peep';
+    "peep";
 
   /**
    * Represents an object "entity" on the map that can typically moves and has a sub-tile coordinate.
@@ -1331,37 +1487,37 @@ declare global {
   }
 
   type VehicleStatus =
-    | 'arriving'
-    | 'crashed'
-    | 'crashing'
-    | 'crooked_house_operating'
-    | 'departing'
-    | 'doing_circus_show'
-    | 'ferris_wheel_rotating'
-    | 'haunted_house_operating'
-    | 'moving_to_end_of_station'
-    | 'operating_1a'
-    | 'rotating'
-    | 'showing_film'
-    | 'simulator_operating'
-    | 'space_rings_operating'
-    | 'starting'
-    | 'stopped_by_block_brake'
-    | 'stopping_1b'
-    | 'stopping'
-    | 'swinging'
-    | 'top_spin_operating'
-    | 'travelling_boat'
-    | 'travelling_cable_lift'
-    | 'travelling_dodgems'
-    | 'travelling'
-    | 'unloading_passengers_1c'
-    | 'unloading_passengers'
-    | 'waiting_for_cable_lift'
-    | 'waiting_for_passengers_17'
-    | 'waiting_for_passengers'
-    | 'waiting_to_depart'
-    | 'waiting_to_start';
+    "arriving" |
+    "crashed" |
+    "crashing" |
+    "crooked_house_operating" |
+    "departing" |
+    "doing_circus_show" |
+    "ferris_wheel_rotating" |
+    "haunted_house_operating" |
+    "moving_to_end_of_station" |
+    "operating_1a" |
+    "rotating" |
+    "showing_film" |
+    "simulator_operating" |
+    "space_rings_operating" |
+    "starting" |
+    "stopped_by_block_brake" |
+    "stopping_1b" |
+    "stopping" |
+    "swinging" |
+    "top_spin_operating" |
+    "travelling_boat" |
+    "travelling_cable_lift" |
+    "travelling_dodgems" |
+    "travelling" |
+    "unloading_passengers_1c" |
+    "unloading_passengers" |
+    "waiting_for_cable_lift" |
+    "waiting_for_passengers_17" |
+    "waiting_for_passengers" |
+    "waiting_to_depart" |
+    "waiting_to_start";
 
   /**
    * Represents a guest or staff member.
@@ -1408,36 +1564,36 @@ declare global {
   }
 
   type PeepFlags =
-    | 'leavingPark'
-    | 'slowWalk'
-    | 'tracking'
-    | 'waving'
-    | 'hasPaidForParkEntry'
-    | 'photo'
-    | 'painting'
-    | 'wow'
-    | 'litter'
-    | 'lost'
-    | 'hunger'
-    | 'toilet'
-    | 'crowded'
-    | 'happiness'
-    | 'nausea'
-    | 'purple'
-    | 'pizza'
-    | 'explode'
-    | 'rideShouldBeMarkedAsFavourite'
-    | 'parkEntranceChosen'
-    | 'contagious'
-    | 'joy'
-    | 'angry'
-    | 'iceCream'
-    | 'hereWeAre';
+    "leavingPark" |
+    "slowWalk" |
+    "tracking" |
+    "waving" |
+    "hasPaidForParkEntry" |
+    "photo" |
+    "painting" |
+    "wow" |
+    "litter" |
+    "lost" |
+    "hunger" |
+    "toilet" |
+    "crowded" |
+    "happiness" |
+    "nausea" |
+    "purple" |
+    "pizza" |
+    "explode" |
+    "rideShouldBeMarkedAsFavourite" |
+    "parkEntranceChosen" |
+    "contagious" |
+    "joy" |
+    "angry" |
+    "iceCream" |
+    "hereWeAre";
 
   /**
    * @deprecated since version 34, use EntityType instead.
    */
-  type PeepType = 'guest' | 'staff';
+  type PeepType = "guest" | "staff";
 
   /**
    * Represents a guest.
@@ -1574,7 +1730,7 @@ declare global {
     readonly patrolArea: PatrolArea;
   }
 
-  type StaffType = 'handyman' | 'mechanic' | 'security' | 'entertainer';
+  type StaffType = "handyman" | "mechanic" | "security" | "entertainer";
 
   interface PatrolArea {
     /**
@@ -1623,19 +1779,18 @@ declare global {
     creationTick: number;
   }
 
-  type LitterType =
-    | 'vomit'
-    | 'vomit_alt'
-    | 'empty_can'
-    | 'rubbish'
-    | 'burger_box'
-    | 'empty_cup'
-    | 'empty_box'
-    | 'empty_bottle'
-    | 'empty_bowl_red'
-    | 'empty_drink_carton'
-    | 'empty_juice_cup'
-    | 'empty_bowl_blue';
+  type LitterType = "vomit" |
+    "vomit_alt" |
+    "empty_can" |
+    "rubbish" |
+    "burger_box" |
+    "empty_cup" |
+    "empty_box" |
+    "empty_bottle" |
+    "empty_bowl_red" |
+    "empty_drink_carton" |
+    "empty_juice_cup" |
+    "empty_bowl_blue";
 
   /**
    * Network APIs
@@ -1664,7 +1819,7 @@ declare global {
     createSocket(): Socket;
   }
 
-  type NetworkMode = 'none' | 'server' | 'client';
+  type NetworkMode = "none" | "server" | "client";
 
   /**
    * Represents a player within a network game.
@@ -1701,29 +1856,29 @@ declare global {
   }
 
   type PermissionType =
-    | 'chat'
-    | 'terraform'
-    | 'set_water_level'
-    | 'toggle_pause'
-    | 'create_ride'
-    | 'remove_ride'
-    | 'build_ride'
-    | 'ride_properties'
-    | 'scenery'
-    | 'path'
-    | 'clear_landscape'
-    | 'guest'
-    | 'staff'
-    | 'park_properties'
-    | 'park_funding'
-    | 'kick_player'
-    | 'modify_groups'
-    | 'set_player_group'
-    | 'cheat'
-    | 'toggle_scenery_cluster'
-    | 'passwordless_login'
-    | 'modify_tile'
-    | 'edit_scenario_options';
+    "chat" |
+    "terraform" |
+    "set_water_level" |
+    "toggle_pause" |
+    "create_ride" |
+    "remove_ride" |
+    "build_ride" |
+    "ride_properties" |
+    "scenery" |
+    "path" |
+    "clear_landscape" |
+    "guest" |
+    "staff" |
+    "park_properties" |
+    "park_funding" |
+    "kick_player" |
+    "modify_groups" |
+    "set_player_group" |
+    "cheat" |
+    "toggle_scenery_cluster" |
+    "passwordless_login" |
+    "modify_tile" |
+    "edit_scenario_options";
 
   /**
    * Park APIs
@@ -1733,15 +1888,7 @@ declare global {
    * The type of park message, including icon and behaviour.
    */
   type ParkMessageType =
-    | 'attraction'
-    | 'peep_on_attraction'
-    | 'peep'
-    | 'money'
-    | 'blank'
-    | 'research'
-    | 'guests'
-    | 'award'
-    | 'chart';
+    "attraction" | "peep_on_attraction" | "peep" | "money" | "blank" | "research" | "guests" | "award" | "chart";
 
   interface ParkMessage {
     /**
@@ -1794,19 +1941,19 @@ declare global {
   }
 
   type ParkFlags =
-    | 'difficultGuestGeneration'
-    | 'difficultParkRating'
-    | 'forbidHighConstruction'
-    | 'forbidLandscapeChanges'
-    | 'forbidMarketingCampaigns'
-    | 'forbidTreeRemoval'
-    | 'freeParkEntry'
-    | 'noMoney'
-    | 'open'
-    | 'preferLessIntenseRides'
-    | 'preferMoreIntenseRides'
-    | 'scenarioCompleteNameInput'
-    | 'unlockAllPrices';
+    "difficultGuestGeneration" |
+    "difficultParkRating" |
+    "forbidHighConstruction" |
+    "forbidLandscapeChanges" |
+    "forbidMarketingCampaigns" |
+    "forbidTreeRemoval" |
+    "freeParkEntry" |
+    "noMoney" |
+    "open" |
+    "preferLessIntenseRides" |
+    "preferMoreIntenseRides" |
+    "scenarioCompleteNameInput" |
+    "unlockAllPrices";
 
   interface Park {
     cash: number;
@@ -1930,18 +2077,18 @@ declare global {
   }
 
   type ScenarioObjectiveType =
-    | 'none'
-    | 'guestsBy'
-    | 'parkValueBy'
-    | 'haveFun'
-    | 'buildTheBest'
-    | '10Rollercoasters'
-    | 'guestsAndRating'
-    | 'monthlyRideIncome'
-    | '10RollercoastersLength'
-    | 'finish5Rollercoasters'
-    | 'repayLoanAndParkValue'
-    | 'monthlyFoodIncome';
+    "none" |
+    "guestsBy" |
+    "parkValueBy" |
+    "haveFun" |
+    "buildTheBest" |
+    "10Rollercoasters" |
+    "guestsAndRating" |
+    "monthlyRideIncome" |
+    "10RollercoastersLength" |
+    "finish5Rollercoasters" |
+    "repayLoanAndParkValue" |
+    "monthlyFoodIncome";
 
   interface ScenarioObjective {
     /**
@@ -1980,7 +2127,7 @@ declare global {
     monthlyIncome: number;
   }
 
-  type ScenarioStatus = 'inProgress' | 'completed' | 'failed';
+  type ScenarioStatus = "inProgress" | "completed" | "failed";
 
   interface Scenario {
     /**
@@ -2032,18 +2179,22 @@ declare global {
     companyValueRecord: number;
   }
 
-  type ClimateType = 'coolAndWet' | 'warm' | 'hotAndDry' | 'cold';
+  type ClimateType =
+    "coolAndWet" |
+    "warm" |
+    "hotAndDry" |
+    "cold";
 
   type WeatherType =
-    | 'sunny'
-    | 'partiallyCloudy'
-    | 'cloudy'
-    | 'rain'
-    | 'heavyRain'
-    | 'thunder'
-    | 'snow'
-    | 'heavySnow'
-    | 'blizzard';
+    "sunny" |
+    "partiallyCloudy" |
+    "cloudy" |
+    "rain" |
+    "heavyRain" |
+    "thunder" |
+    "snow" |
+    "heavySnow" |
+    "blizzard";
 
   interface ClimateState {
     readonly weather: WeatherType;
@@ -2196,12 +2347,12 @@ declare global {
      * Whether to browse a file for loading or saving. Saving will prompt the user
      * before overwriting a file.
      */
-    type: 'load';
+    type: "load";
 
     /**
      * The type of file to browse for.
      */
-    fileType: 'game' | 'heightmap';
+    fileType: "game" | "heightmap";
 
     /**
      * The pre-selected file to load by default if the user clicks OK.
@@ -2229,8 +2380,8 @@ declare global {
    */
   interface ScenarioFile {
     id: number;
-    category: 'beginner' | 'challenging' | 'expert' | 'real' | 'other' | 'dlc' | 'build_your_own';
-    sourceGame: 'rct1' | 'rct1_aa' | 'rct1_ll' | 'rct2' | 'rct2_ww' | 'rct2_tt' | 'real' | 'other';
+    category: "beginner" | "challenging" | "expert" | "real" | "other" | "dlc" | "build_your_own";
+    sourceGame: "rct1" | "rct1_aa" | "rct1_ll" | "rct2" | "rct2_ww" | "rct2_tt" | "real" | "other";
     path: string;
     internalName: string;
     name: string;
@@ -2282,47 +2433,47 @@ declare global {
   }
 
   type CursorType =
-    | 'arrow'
-    | 'bench_down'
-    | 'bin_down'
-    | 'blank'
-    | 'cross_hair'
-    | 'diagonal_arrows'
-    | 'dig_down'
-    | 'entrance_down'
-    | 'fence_down'
-    | 'flower_down'
-    | 'fountain_down'
-    | 'hand_closed'
-    | 'hand_open'
-    | 'hand_point'
-    | 'house_down'
-    | 'lamppost_down'
-    | 'paint_down'
-    | 'path_down'
-    | 'picker'
-    | 'statue_down'
-    | 'tree_down'
-    | 'up_arrow'
-    | 'up_down_arrow'
-    | 'volcano_down'
-    | 'walk_down'
-    | 'water_down'
-    | 'zzz';
+    "arrow" |
+    "bench_down" |
+    "bin_down" |
+    "blank" |
+    "cross_hair" |
+    "diagonal_arrows" |
+    "dig_down" |
+    "entrance_down" |
+    "fence_down" |
+    "flower_down" |
+    "fountain_down" |
+    "hand_closed" |
+    "hand_open" |
+    "hand_point" |
+    "house_down" |
+    "lamppost_down" |
+    "paint_down" |
+    "path_down" |
+    "picker" |
+    "statue_down" |
+    "tree_down" |
+    "up_arrow" |
+    "up_down_arrow" |
+    "volcano_down" |
+    "walk_down" |
+    "water_down" |
+    "zzz";
 
   type ToolFilter =
-    | 'terrain'
-    | 'entity'
-    | 'ride'
-    | 'water'
-    | 'scenery'
-    | 'footpath'
-    | 'footpath_item'
-    | 'park_entrance'
-    | 'wall'
-    | 'large_scenery'
-    | 'label'
-    | 'banner';
+    "terrain" |
+    "entity" |
+    "ride" |
+    "water" |
+    "scenery" |
+    "footpath" |
+    "footpath_item" |
+    "park_entrance" |
+    "wall" |
+    "large_scenery" |
+    "label" |
+    "banner";
 
   interface ShortcutDesc {
     /**
@@ -2353,30 +2504,12 @@ declare global {
    * Represents the type of a widget, e.g. button or label.
    */
   type WidgetType =
-    | 'button'
-    | 'checkbox'
-    | 'colourpicker'
-    | 'custom'
-    | 'dropdown'
-    | 'groupbox'
-    | 'label'
-    | 'listview'
-    | 'spinner'
-    | 'textbox'
-    | 'viewport';
+    "button" | "checkbox" | "colourpicker" | "custom" | "dropdown" | "groupbox" |
+    "label" | "listview" | "spinner" | "textbox" | "viewport";
 
   type Widget =
-    | ButtonWidget
-    | CheckboxWidget
-    | ColourPickerWidget
-    | CustomWidget
-    | DropdownWidget
-    | GroupBoxWidget
-    | LabelWidget
-    | ListViewWidget
-    | SpinnerWidget
-    | TextBoxWidget
-    | ViewportWidget;
+    ButtonWidget | CheckboxWidget | ColourPickerWidget | CustomWidget | DropdownWidget | GroupBoxWidget |
+    LabelWidget | ListViewWidget | SpinnerWidget | TextBoxWidget | ViewportWidget;
 
   interface WidgetBase {
     readonly window?: Window;
@@ -2392,7 +2525,7 @@ declare global {
   }
 
   interface ButtonWidget extends WidgetBase {
-    type: 'button';
+    type: "button";
     /**
      * Whether the button has a 3D border.
      * By default, text buttons have borders and image buttons do not but it can be overridden.
@@ -2405,46 +2538,46 @@ declare global {
   }
 
   interface CheckboxWidget extends WidgetBase {
-    type: 'checkbox';
+    type: "checkbox";
     text?: string;
     isChecked?: boolean;
     onChange?: (isChecked: boolean) => void;
   }
 
   interface ColourPickerWidget extends WidgetBase {
-    type: 'colourpicker';
+    type: "colourpicker";
     colour?: number;
     onChange?: (colour: number) => void;
   }
 
   interface CustomWidget extends WidgetBase {
-    type: 'custom';
+    type: "custom";
     onDraw?: (this: CustomWidget, g: GraphicsContext) => void;
   }
 
   interface DropdownWidget extends WidgetBase {
-    type: 'dropdown';
+    type: "dropdown";
     items?: string[];
     selectedIndex?: number;
     onChange?: (index: number) => void;
   }
 
   interface GroupBoxWidget extends WidgetBase {
-    type: 'groupbox';
+    type: "groupbox";
     text?: string;
   }
 
   interface LabelWidget extends WidgetBase {
-    type: 'label';
+    type: "label";
     text?: string;
     textAlign?: TextAlignment;
   }
 
-  type TextAlignment = 'left' | 'centred';
+  type TextAlignment = "left" | "centred";
 
-  type SortOrder = 'none' | 'ascending' | 'descending';
+  type SortOrder = "none" | "ascending" | "descending";
 
-  type ScrollbarType = 'none' | 'horizontal' | 'vertical' | 'both';
+  type ScrollbarType = "none" | "horizontal" | "vertical" | "both";
 
   interface ListViewColumn {
     canSort?: boolean;
@@ -2458,7 +2591,7 @@ declare global {
   }
 
   interface ListViewItemSeperator {
-    type: 'seperator';
+    type: "seperator";
     text?: string;
   }
 
@@ -2470,7 +2603,7 @@ declare global {
   }
 
   interface ListViewWidget extends WidgetBase {
-    type: 'listview';
+    type: "listview";
     scrollbars?: ScrollbarType;
     isStriped?: boolean;
     showColumnHeaders?: boolean;
@@ -2485,7 +2618,7 @@ declare global {
   }
 
   interface SpinnerWidget extends WidgetBase {
-    type: 'spinner';
+    type: "spinner";
     text?: string;
 
     onDecrement?: () => void;
@@ -2494,14 +2627,14 @@ declare global {
   }
 
   interface TextBoxWidget extends WidgetBase {
-    type: 'textbox';
+    type: "textbox";
     text?: string;
     maxLength?: number;
     onChange?: (text: string) => void;
   }
 
   interface ViewportWidget extends WidgetBase {
-    type: 'viewport';
+    type: "viewport";
     viewport?: Viewport;
   }
 
@@ -2623,9 +2756,9 @@ declare global {
     listen(port: number, host?: string): Listener;
     close(): Listener;
 
-    on(event: 'connection', callback: (socket: Socket) => void): Listener;
+    on(event: "connection", callback: (socket: Socket) => void): Listener;
 
-    off(event: 'connection', callback: (socket: Socket) => void): Listener;
+    off(event: "connection", callback: (socket: Socket) => void): Listener;
   }
 
   /**
@@ -2639,13 +2772,13 @@ declare global {
     end(data?: string): Socket;
     write(data: string): boolean;
 
-    on(event: 'close', callback: (hadError: boolean) => void): Socket;
-    on(event: 'error', callback: (hadError: boolean) => void): Socket;
-    on(event: 'data', callback: (data: string) => void): Socket;
+    on(event: "close", callback: (hadError: boolean) => void): Socket;
+    on(event: "error", callback: (hadError: boolean) => void): Socket;
+    on(event: "data", callback: (data: string) => void): Socket;
 
-    off(event: 'close', callback: (hadError: boolean) => void): Socket;
-    off(event: 'error', callback: (hadError: boolean) => void): Socket;
-    off(event: 'data', callback: (data: string) => void): Socket;
+    off(event: "close", callback: (hadError: boolean) => void): Socket;
+    off(event: "error", callback: (hadError: boolean) => void): Socket;
+    off(event: "data", callback: (data: string) => void): Socket;
   }
 
   interface TitleSequence {
@@ -2737,77 +2870,77 @@ declare global {
   }
 
   type TitleSequenceCommandType =
-    | 'load'
-    | 'loadsc'
-    | 'location'
-    | 'rotate'
-    | 'zoom'
-    | 'speed'
-    | 'follow'
-    | 'wait'
-    | 'restart'
-    | 'end';
+    "load" |
+    "loadsc" |
+    "location" |
+    "rotate" |
+    "zoom" |
+    "speed" |
+    "follow" |
+    "wait" |
+    "restart" |
+    "end";
 
   interface LoadTitleSequenceCommand {
-    type: 'load';
+    type: "load";
     index: number;
   }
 
   interface LocationTitleSequenceCommand {
-    type: 'location';
+    type: "location";
     x: number;
     y: number;
   }
 
   interface RotateTitleSequenceCommand {
-    type: 'rotate';
+    type: "rotate";
     rotations: number;
   }
 
   interface ZoomTitleSequenceCommand {
-    type: 'zoom';
+    type: "zoom";
     zoom: number;
   }
 
   interface FollowTitleSequenceCommand {
-    type: 'follow';
+    type: "follow";
     id: number | null;
   }
 
   interface SpeedTitleSequenceCommand {
-    type: 'speed';
+    type: "speed";
     speed: number;
   }
 
   interface WaitTitleSequenceCommand {
-    type: 'wait';
+    type: "wait";
     duration: number;
   }
 
   interface LoadScenarioTitleSequenceCommand {
-    type: 'loadsc';
+    type: "loadsc";
     scenario: string;
   }
 
   interface RestartTitleSequenceCommand {
-    type: 'restart';
+    type: "restart";
   }
 
   interface EndTitleSequenceCommand {
-    type: 'end';
+    type: "end";
   }
 
   type TitleSequenceCommand =
-    | LoadTitleSequenceCommand
-    | LocationTitleSequenceCommand
-    | RotateTitleSequenceCommand
-    | ZoomTitleSequenceCommand
-    | FollowTitleSequenceCommand
-    | SpeedTitleSequenceCommand
-    | WaitTitleSequenceCommand
-    | LoadScenarioTitleSequenceCommand
-    | RestartTitleSequenceCommand
-    | EndTitleSequenceCommand;
+    LoadTitleSequenceCommand |
+    LocationTitleSequenceCommand |
+    RotateTitleSequenceCommand |
+    ZoomTitleSequenceCommand |
+    FollowTitleSequenceCommand |
+    SpeedTitleSequenceCommand |
+    WaitTitleSequenceCommand |
+    LoadScenarioTitleSequenceCommand |
+    RestartTitleSequenceCommand |
+    EndTitleSequenceCommand;
 
   interface TitleSequenceManager {
     /**
@@ -2910,7 +3043,7 @@ declare global {
      * - An array of bytes
      * - A {@link Uint8Array} of bytes
      */
-    data: string | number | Uint8Array;
+    data: string | number[] | Uint8Array;
   }
 
   /**
@@ -2927,7 +3060,7 @@ declare global {
      * - An array of bytes
      * - A {@link Uint8Array} of bytes
      */
-    data: string | number | Uint8Array;
+    data: string | number[] | Uint8Array;
   }
 
   /**
@@ -2952,7 +3085,7 @@ declare global {
      * - An array of bytes
      * - A {@link Uint8Array} of bytes
      */
-    data: string | number | Uint8Array;
+    data: string | number[] | Uint8Array;
   }
 
   interface ImageIndexRange {

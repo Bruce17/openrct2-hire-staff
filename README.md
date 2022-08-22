@@ -49,7 +49,7 @@ If you want to alter plugin data, refer to [OpenRCT2 scripting guide](https://gi
 
 1. Make sure you've enabled [OpenRCT2 hot reload feature](https://github.com/OpenRCT2/OpenRCT2/blob/master/distribution/scripting.md#writing-scripts) by setting `enable_hot_reloading = true` in your `/OpenRCT2/config.ini`
 2. `cd` into repo
-3. run `npm start:dev` (this will place compiled and minified mod file inside `PATH_TO_OPENRCT2/plugin/` directory and inside `dist` directory inside the repo)
+3. run `npm run start:dev` (this will place compiled and minified mod file inside `PATH_TO_OPENRCT2/plugin/` directory and inside `dist` directory inside the repo)
 
 Prod builds can be done through `npm start` and `npm run build` respectively.
 

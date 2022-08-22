@@ -1,5 +1,11 @@
 {
   "singleQuote": true,
   "quoteProps": "consistent",
-  "printWidth": 120
+  "printWidth": 120,
+  "prettier/prettier": [
+    "error",
+    {
+      "endOfLine": "auto"
+    }
+  ]
 }

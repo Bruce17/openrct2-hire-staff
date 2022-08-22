@@ -7,5 +7,6 @@ registerPlugin({
   authors: [config.getString('MOD_AUTHOR')],
   type: 'local',
   licence: 'MIT',
+  targetApiVersion: 34,
   main,
 });

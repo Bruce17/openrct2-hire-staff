@@ -1,5 +1,5 @@
 {
-  "name": "openrct2-typescript-mod-template",
+  "name": "openrct2-hire-staff",
   "version": "1.0.0",
   "description": "",
   "main": "",
@@ -15,20 +15,19 @@
     "test:watch": "gulp testWatch",
     "lint": "gulp lint",
     "lint:fix": "gulp lintFix",
-    "init": "gulp init",
     "help": "gulp --tasks",
     "husky:prepare": "husky install"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wisnia74/openrct2-typescript-mod-template.git"
+    "url": "git+https://github.com/Bruce17/openrct2-hire-staff.git"
   },
-  "author": "wisnia74",
+  "author": "Bruce",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wisnia74/openrct2-typescript-mod-template/issues"
+    "url": "https://github.com/Bruce17/openrct2-hire-staff/issues"
   },
-  "homepage": "https://github.com/wisnia74/openrct2-typescript-mod-template#readme",
+  "homepage": "https://github.com/Bruce17/openrct2-hire-staff#readme",
   "devDependencies": {
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-typescript": "^8.3.2",
