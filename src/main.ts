@@ -1,62 +1,122 @@
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="/lib/openrct2.d.ts" />
+const DEBUG = false;
+const STAFF_TYPE: StaffType[] = ['handyman', 'mechanic', 'security', 'entertainer'];
 
-const STAFF_TYPE = ['handyman', 'mechanic', 'security', 'entertainer'];
+function debug(message: string): void {
+  if (!DEBUG) {
+    return;
+  }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const noop = (): void => {};
+  if (typeof ui !== 'undefined') {
+    ui.showError('Hire staff debug', message);
+    return;
+  }
+
+  console.log(message);
+}
+
+function error(message: string): void {
+  if (typeof ui !== 'undefined') {
+    ui.showError('Hire staff error', message);
+    return;
+  }
+
+  console.log(message);
+}
+
+const callback = function (result: StaffHireNewActionResult): void {
+  if (result.error === 0) {
+    debug(`Hired a new staff member with ID ${result.peep}.`);
+  } else {
+    error(`Failed to hire new staff. Action error: ${result.error}.`);
+  }
+};
 
 function getStaffTypeValue(staffType: StaffType | string): number {
-  const staffTypeInternalValue = STAFF_TYPE.indexOf(staffType);
+  const staffTypeInternalValue = STAFF_TYPE.indexOf(staffType as StaffType);
 
-  if (staffTypeInternalValue > STAFF_TYPE.length) {
-    ui.showError('Error adding staff', `Invalid staff type "${staffType}"!`);
+  if (staffTypeInternalValue < 0 || staffTypeInternalValue >= STAFF_TYPE.length) {
+    error(`Invalid staff type "${staffType}"!`);
+    return 0;
   }
 
   return staffTypeInternalValue;
 }
 
 function prepareStaffOrders(staffType: StaffType | string): number {
-  let staffOrders = 0;
-
-  if (staffType === 'handyman') {
-    staffOrders = 7; // STAFF_ORDERS_SWEEPING | STAFF_ORDERS_WATER_FLOWERS | STAFF_ORDERS_EMPTY_BINS
-  } else if (staffType === 'mechanic') {
-    staffOrders = 3; // STAFF_ORDERS_INSPECT_RIDES | STAFF_ORDERS_FIX_RIDES
+  switch (staffType) {
+    case 'handyman':
+      return 7; // sweeping | watering flowers | empty bins
+    case 'mechanic':
+      return 3; // inspect rides | fix rides
+    default:
+      return 0;
   }
+}
 
-  return staffOrders;
+const entertainerCostumes = objectManager
+  .getAllObjects('peep_animations')
+  .filter((costume) => costume.identifier.includes('entertainer_'));
+
+function getEntertainerCostumeIndex(staffType: StaffType | string): number {
+  switch (staffType) {
+    case 'entertainer':
+      return entertainerCostumes[
+        Math.random() * entertainerCostumes.length | 0
+      ].index;
+    default:
+      return 0;
+  }
 }
 
 function addStaff(staffType: StaffType | string, amount: number): void {
-  if (amount > 0) {
-    const options = {
-      autoPosition: true,
-      staffType: getStaffTypeValue(staffType),
-      entertainerType: 0,
-      staffOrders: prepareStaffOrders(staffType),
-    };
-
-    for (let i = 0; i < amount; i += 1) {
-      context.executeAction('staffhire', options, noop);
-    }
-  } else {
+  if (amount <= 0) {
     ui.showError('Error adding staff', `Invalid staff amount "${amount}"!`);
+    return;
+  }
+
+  const typeValue = getStaffTypeValue(staffType);
+  if (typeValue < 0 || typeValue >= STAFF_TYPE.length) {
+    error(`Invalid staff type "${staffType}"!`);
+    return;
+  }
+
+  const options = {
+    autoPosition: true,
+    staffType: typeValue,
+    costumeIndex: getEntertainerCostumeIndex(staffType),
+    staffOrders: prepareStaffOrders(staffType),
+  } satisfies StaffHireArgs;
+
+  for (let i = 0; i < amount; i += 1) {
+    // If we are hiring more than one entertainer, we want to randomize the costume for each one.
+    if (i > 0 && staffType === 'entertainer') {
+      options.costumeIndex = getEntertainerCostumeIndex(staffType);
+    }
+
+    context.executeAction('staffhire', options, callback);
   }
 }
 
 function showWindow(): void {
   if (typeof ui === 'undefined') {
     console.log('OpenRCT2 is running in headless mode!');
-  }
-
-  const window = ui.getWindow('hire_staff_window');
-  if (window) {
-    window.bringToFront();
     return;
   }
 
-  let staffType: StaffType | string = STAFF_TYPE[0];
+  const staffTypeLabels = [
+    context.formatString('{STRINGID}', 1863),
+    context.formatString('{STRINGID}', 1864),
+    context.formatString('{STRINGID}', 1865),
+    context.formatString('{STRINGID}', 1866),
+  ];
+
+  const existingWindow = ui.getWindow('hire_staff_window');
+  if (existingWindow) {
+    existingWindow.bringToFront();
+    return;
+  }
+
+  let staffType: StaffType = STAFF_TYPE[0];
   let amount = 10;
 
   const windowDesc: WindowDesc = {
@@ -65,7 +125,6 @@ function showWindow(): void {
     height: 100,
     title: 'Hire Staff',
     widgets: [
-      // row: amount
       {
         type: 'label',
         x: 5,
@@ -84,11 +143,9 @@ function showWindow(): void {
         text: '10',
         maxLength: 3,
         onChange(targetAmount: string): void {
-          amount = parseInt(targetAmount, 10) || 0;
+          amount = Number.parseInt(targetAmount, 10) || 0;
         },
       },
-
-      // row: staff type
       {
         type: 'label',
         x: 5,
@@ -104,13 +161,11 @@ function showWindow(): void {
         y: 40,
         width: 100,
         height: 15,
-        items: STAFF_TYPE,
+        items: staffTypeLabels,
         onChange(index: number): void {
-          staffType = STAFF_TYPE[index];
+          staffType = STAFF_TYPE[index] ?? STAFF_TYPE[0];
         },
       },
-
-      // row: hire button
       {
         type: 'button',
         x: 40,

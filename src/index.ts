@@ -1,12 +1,11 @@
-import config from './config';
 import main from './main';
 
 registerPlugin({
-  name: config.getString('MOD_NAME'),
-  version: '1.0',
-  authors: [config.getString('MOD_AUTHOR')],
-  type: 'local',
-  licence: 'MIT',
-  targetApiVersion: 34,
-  main,
+    name: 'openrct2-hire-staff',
+    version: '2.0.0',
+    licence: 'MIT',
+    authors: [''],
+    type: 'local',
+    targetApiVersion: 77,
+    main,
 });
