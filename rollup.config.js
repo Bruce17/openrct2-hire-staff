@@ -1,5 +1,6 @@
 import resolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
+import terser from "@rollup/plugin-terser";
 
 const isRelease = process.env.BUILD === "release";
 const pluginPath = process.env.OPENRCT2_PLUGIN_PATH;
@@ -16,5 +17,6 @@ export default {
     plugins: [
         resolve(),
         typescript(),
+        terser(),
     ],
 };
