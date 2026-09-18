@@ -1,14 +1,16 @@
-const namespace = "HireStaff";
-const configPrefix = `${namespace}.`;
+export const storageNamespace = "HireStaff";
+const configPrefix = `${storageNamespace}.`;
 
 const debugEnabled = `${configPrefix}debug`;
 const autoFireStaffEnabled = `${configPrefix}autoFireStaffEnabled`;
 const staffAmount = `${configPrefix}staffAmount`;
+const storedStaff = `${configPrefix}storedStaff`;
 
 const defaults = {
   debug: false,
   autoFireStaffEnabled: false,
   staffAmount: 10,
+  storedStaff: "",
 };
 
 const config = {
@@ -49,7 +51,20 @@ const config = {
 
   setStaffAmount(v: number) {
     return context.sharedStorage.set(staffAmount, v);
-  }
+  },
+
+  /**
+   * Get the stored staff data from shared storage.
+   * This is used to re-hire staff at the start of a new month.
+   * The data is stored as a JSON string.
+   */
+  getStoredStaff(): string {
+    return context.sharedStorage.get(storedStaff, defaults.storedStaff);
+  },
+
+  setStoredStaff(v: string) {
+    return context.sharedStorage.set(storedStaff, v);
+  },
 };
 
 export default config;

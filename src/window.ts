@@ -16,10 +16,12 @@ export function showWindow(): void {
   const staffTypeLabels = HireStaff.getStaffTypeLabels();
   let staffType: StaffType = HireStaff.getStaff();
 
+  const noMoneyPark = park.getFlag("noMoney");
+
   const windowDesc: WindowDesc = {
     classification: "hire_staff_window",
     width: 180,
-    height: 100,
+    height: 130,
     title: "Hire Staff",
     widgets: [
       {
@@ -74,6 +76,31 @@ export function showWindow(): void {
         onClick(): void {
           HireStaff.addStaff(staffType, config.getStaffAmount());
         },
+      },
+      {
+        type: "checkbox",
+        x: 5,
+        y: 95,
+        width: 15,
+        height: 15,
+        isChecked: config.getAutoFireStaffEnabled(),
+        onChange(checked: boolean): void {
+          config.setAutoFireStaffEnabled(checked);
+        },
+        tooltip: "Enable automatic staff firing at month end and rehiring at month start",
+        isDisabled: noMoneyPark,
+        isVisible: !noMoneyPark,
+      },
+      {
+        type: "label",
+        x: 25,
+        y: 95,
+        width: 150,
+        height: 15,
+        text: noMoneyPark ? "Auto fire/rehire: Disabled (no-money park)" : "Auto fire/rehire monthly",
+        tooltip: noMoneyPark 
+          ? "This feature is disabled in no-money parks where wages don't apply."
+          : "When enabled, all staff will be fired at month end and rehired at month start. Saves wages for the last day.",
       },
     ],
   };
